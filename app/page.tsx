@@ -137,7 +137,7 @@ export default function Dashboard() {
       <section>
         <div className="flex flex-col gap-1">
           <h1 className="text-2xl font-bold tracking-tight text-black sm:text-3xl">
-            Welcome backk, <span className="text-gradient">{userName}</span> 👋
+            Welcome backkk, <span className="text-gradient">{userName}</span> 👋
           </h1>
           <p className="text-sm text-primary-muted dark:text-secondary-pale/60">
             Here's what's happening in your Sunday School today.
