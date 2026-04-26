@@ -1,26 +1,67 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #6366f1;
+  --color-primary-dark: #4f46e5;
+  --color-secondary: #ec4899;
+  --color-accent: #8b5cf6;
+  
+  --color-sidebar: #f8fafc;
+  --color-sidebar-foreground: #0f172a;
+  
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  
+  --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fdfdfd;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --border: #e2e8f0;
+  --input: #f1f5f9;
+  --ring: #6366f1;
+  --sidebar-bg: #f8fafc;
+  --sidebar-text: #64748b;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--border);
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer utilities {
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  }
+  
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-600;
+  }
+}
+
+/* Premium Toast Customization */
+.premium-toast {
+  padding: 12px 16px !important;
+}
+
+.premium-toast [data-title] {
+  font-weight: 800 !important;
+  font-size: 0.85rem !important;
+  letter-spacing: -0.01em !important;
+}
+
+.premium-toast [data-description] {
+  font-size: 0.75rem !important;
+  opacity: 0.8 !important;
+  font-weight: 500 !important;
 }
