@@ -18,9 +18,11 @@ import {
   Trophy,
   Newspaper,
   LogOut,
-  Briefcase
+  Briefcase,
+  X
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { motion, AnimatePresence } from "framer-motion";
 
 const menuItems = [
   { icon: LayoutDashboard, label: "Dashboard", href: "/" },
@@ -35,7 +37,13 @@ const menuItems = [
   { icon: Settings, label: "Settings", href: "/settings" },
 ];
 
-export function Sidebar() {
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+  isCollapsed?: boolean;
+}
+
+export function Sidebar({ isOpen, onClose, isCollapsed }: SidebarProps) {
   const pathname = usePathname();
 
   const handleLogout = async () => {
@@ -46,55 +54,105 @@ export function Sidebar() {
     }
   };
 
-  return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r border-slate-200 bg-[#f8fafc] transition-all duration-300 shadow-sm">
-      <div className="flex h-full flex-col px-4 py-4">
-        <div className="mb-6 flex items-center gap-3 px-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg">
+  const SidebarContent = (
+    <div className={cn("flex h-full flex-col py-4", isCollapsed ? "px-2" : "px-4")}>
+      <div className={cn("mb-6 flex items-center justify-between px-2", isCollapsed && "justify-center")}>
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shrink-0">
             <School size={20} />
           </div>
-          <span className="text-lg font-bold tracking-tight text-slate-900">
-          Kingdom Kids
-          </span>
+          {!isCollapsed && (
+            <span className="text-lg font-bold tracking-tight text-slate-900 animate-in fade-in duration-500">
+            Kingdom Kids
+            </span>
+          )}
         </div>
-
-        <nav className="flex-1 space-y-1 overflow-y-auto custom-scrollbar pr-1">
-          {menuItems.map((item) => {
-            const isActive = pathname === item.href;
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "group flex items-center justify-between rounded-xl px-3 py-2 text-[13px] font-bold transition-all duration-200",
-                  isActive 
-                    ? "bg-indigo-600 text-white shadow-md shadow-indigo-100" 
-                    : "text-slate-600 hover:bg-slate-100 hover:text-indigo-600"
-                )}
-              >
-                <div className="flex items-center gap-3">
-                  <item.icon size={18} className={cn(
-                    "transition-colors",
-                    isActive ? "text-white" : "text-slate-400 group-hover:text-indigo-600"
-                  )} />
-                  {item.label}
-                </div>
-                {isActive && <ChevronRight size={12} />}
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="mt-4 pt-4 border-t border-slate-100">
-          <button 
-            onClick={handleLogout}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-[13px] font-bold text-rose-600 transition-all hover:bg-rose-50"
-          >
-            <LogOut size={18} />
-            Sign Out
+        {onClose && (
+          <button onClick={onClose} className="lg:hidden p-2 text-slate-400 hover:bg-slate-100 rounded-xl">
+            <X size={20} />
           </button>
-        </div>
+        )}
       </div>
-    </aside>
+
+      <nav className="flex-1 space-y-1 overflow-y-auto custom-scrollbar pr-1">
+        {menuItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              onClick={onClose}
+              title={isCollapsed ? item.label : ""}
+              className={cn(
+                "group flex items-center rounded-xl py-2 text-[13px] font-bold transition-all duration-200",
+                isCollapsed ? "justify-center px-0 h-10 w-10 mx-auto" : "justify-between px-3",
+                isActive 
+                  ? "bg-indigo-600 text-white shadow-md shadow-indigo-100" 
+                  : "text-slate-600 hover:bg-slate-100 hover:text-indigo-600"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                <item.icon size={18} className={cn(
+                  "transition-colors",
+                  isActive ? "text-white" : "text-slate-400 group-hover:text-indigo-600"
+                )} />
+                {!isCollapsed && <span className="animate-in fade-in slide-in-from-left-2 duration-300">{item.label}</span>}
+              </div>
+              {isActive && !isCollapsed && <ChevronRight size={12} />}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <div className={cn("mt-4 pt-4 border-t border-slate-100", isCollapsed && "flex justify-center")}>
+        <button 
+          onClick={handleLogout}
+          title={isCollapsed ? "Sign Out" : ""}
+          className={cn(
+            "flex items-center gap-3 rounded-xl py-2 text-[13px] font-bold text-rose-600 transition-all hover:bg-rose-50",
+            isCollapsed ? "h-10 w-10 justify-center px-0" : "w-full px-3"
+          )}
+        >
+          <LogOut size={18} />
+          {!isCollapsed && "Sign Out"}
+        </button>
+      </div>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Sidebar */}
+      <aside className={cn(
+        "hidden lg:flex fixed left-0 top-0 z-40 h-screen border-r border-slate-200 bg-[#f8fafc] shadow-sm transition-all duration-300",
+        isCollapsed ? "w-20" : "w-64"
+      )}>
+        {SidebarContent}
+      </aside>
+
+      {/* Mobile Drawer */}
+      <AnimatePresence>
+        {isOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={onClose}
+              className="fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm lg:hidden"
+            />
+            <motion.aside
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed left-0 top-0 z-[60] h-screen w-72 border-r border-slate-200 bg-white shadow-2xl lg:hidden"
+            >
+              {SidebarContent}
+            </motion.aside>
+          </>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

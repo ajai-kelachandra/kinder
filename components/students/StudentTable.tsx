@@ -17,7 +17,7 @@ export function StudentTable({ students, onEdit, onMove, onDelete }: StudentTabl
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
-              <th className="px-5 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Student</th>
+              <th className="px-5 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest sticky left-0 bg-slate-50 z-20 border-r border-slate-100 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.05)]">Student</th>
               <th className="px-5 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Class</th>
               <th className="px-5 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Teacher</th>
               <th className="px-5 py-3 text-[10px] font-black text-slate-500 uppercase tracking-widest">Parent</th>
@@ -38,7 +38,7 @@ export function StudentTable({ students, onEdit, onMove, onDelete }: StudentTabl
                   key={student.id} 
                   className="group transition-colors hover:bg-slate-50/50"
                 >
-                  <td className="px-5 py-2.5">
+                  <td className="px-5 py-2.5 sticky left-0 bg-white group-hover:bg-slate-50 z-10 border-r border-slate-100 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.05)] transition-colors">
                     <div className="flex items-center gap-3">
                       <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
                         <User size={16} />

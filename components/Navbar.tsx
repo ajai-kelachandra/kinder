@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Search, Bell, User, LogOut, Settings, ChevronDown } from "lucide-react";
+import { Search, Bell, User, LogOut, Settings, ChevronDown, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
@@ -10,7 +10,11 @@ import { useAuth } from "@/lib/context/AuthContext";
 import { signOut } from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 
-export function Navbar() {
+interface NavbarProps {
+  onToggleSidebar?: () => void;
+}
+
+export function Navbar({ onToggleSidebar }: NavbarProps) {
   const { user } = useAuth();
   const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
   const router = useRouter();
@@ -32,8 +36,15 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-slate-200 bg-white/80 px-6 backdrop-blur-xl">
-      <div className="flex w-full max-w-xl items-center gap-3">
+    <header className="sticky top-0 z-30 hidden lg:flex h-14 w-full items-center justify-between border-b border-slate-200 bg-white/80 px-6 backdrop-blur-xl">
+      <div className="flex w-full max-w-xl items-center gap-4">
+        <button 
+          onClick={onToggleSidebar}
+          className="rounded-xl p-2 text-slate-500 hover:bg-slate-100 transition-colors"
+        >
+          <Menu size={20} />
+        </button>
+        
         <div className="relative w-full">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
           <input 

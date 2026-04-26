@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ⛪ Kingdom Kids - Sunday School Management System (Admin Panel)
 
-## Getting Started
+Kingdom Kids is a high-performance, real-time Sunday School administration platform built with **Next.js 15**, **Firebase**, and **Tailwind CSS**. It is designed to bridge the gap between church leadership, teachers, and parents.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Core Functionalities
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 1. 📊 Smart Dashboard
+*   **Real-time Stats**: Live tracking of Total Students, Active Lessons, Attendance Rate, and Staff Count.
+*   **Dynamic Welcome**: Personalised greeting for the logged-in administrator.
+*   **Birthday Widget**: Automatically scans the database to highlight student birthdays in the coming 7 days.
+*   **Activity Feed**: Instant notifications for new student registrations and lesson uploads.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 2. 👥 Student Management
+*   **Complete Profiles**: Tracking Name, Age, Birthday, Grade, and Parent Contact.
+*   **Class Categorisation**: Students are automatically grouped (Nursery, Balavakup, etc.).
+*   **Dynamic Attendance Rate**: Real-time percentage calculation based on all historical registers.
+*   **Bulk Import**: Excel/CSV parsing to import hundreds of students in seconds.
+*   **Class Migration**: One-click "Move to Next Class" functionality.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 3. 👩‍🏫 Teacher Coordination
+*   **Staff Directory**: Manage teacher profiles, contact info, and assigned class categories.
+*   **Live Availability**: Teachers can mark themselves as "Away" or "On Duty".
+*   **Substitution System**: The Attendance page detects if an assigned teacher is away and triggers a **"Substitute Needed"** alert.
 
-## Learn More
+### 4. 📝 Attendance System
+*   **Smart Register**: Group-based attendance tracking with auto-save functionality.
+*   **Parent Notifications**: Integrated **WhatsApp Bridge** to instantly notify parents when a child is marked absent.
+*   **Notification Tracking**: Tracks which parents have been notified for each session.
 
-To learn more about Next.js, take a look at the following resources:
+### 5. 📚 Curriculum Library
+*   **Lesson Management**: Upload and categorise teaching materials.
+*   **Real-time Previews**: Quick-view of the next upcoming lesson on the dashboard.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 📂 Database Schema (Firestore)
 
-## Deploy on Vercel
+To build your **User-Facing Front-end**, your app should interact with these collections:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### `students`
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `Name` | string | Student's full name |
+| `Category` | string | e.g., "Nursery", "Balavakup" |
+| `Birthday` | string | YYYY-MM-DD |
+| `ParentName` | string | Name of the guardian |
+| `Contact` | string | WhatsApp/Phone number |
+| `Attendance` | number | Dynamic percentage (0-100) |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### `attendance`
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `date` | string | YYYY-MM-DD |
+| `category` | string | The class group |
+| `attendance` | map | `{ [studentId]: "present" | "absent" }` |
+| `notifiedStudents`| map | `{ [studentId]: true }` (WhatsApp tracking) |
+
+### `teachers`
+| Field | Type | Description |
+| :--- | :--- | :--- |
+| `name` | string | Teacher's name |
+| `category` | string | Assigned class category |
+| `isAvailable` | boolean | Live availability status |
+
+---
+
+## 🎨 Design System
+*   **Aesthetics**: Glassmorphism, premium gradients, and smooth Framer Motion animations.
+*   **Typography**: Using **Inter** for professional, clean readability.
+*   **Icons**: Powered by **Lucide React**.
+
+---
+
+## 🛠️ Technology Stack
+*   **Framework**: Next.js 15 (App Router)
+*   **Database**: Google Firestore
+*   **Authentication**: Firebase Auth (Email/Social)
+*   **Styling**: Tailwind CSS & Lucide Icons
+*   **Animations**: Framer Motion
+*   **Data Processing**: XLSX for Excel handling
+
+---
+
+## 💡 Recommended User-Facing Features (Next Phase)
+1.  **Parent Portal**: Allow parents to log in and see their child's attendance history and upcoming lessons.
+2.  **Lesson Access**: Digital access for students to download study materials.
+3.  **Direct Chat**: Integration between parents and class teachers.
+4.  **Event RSVP**: Parents can confirm attendance for church events.
+
+---
+
+## 🔧 Installation & Setup
+1. Clone the repository.
+2. Install dependencies: `npm install`
+3. Set up `.env.local` with your Firebase credentials.
+4. Run development server: `npm run dev`
